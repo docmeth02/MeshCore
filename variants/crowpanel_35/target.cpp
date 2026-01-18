@@ -15,10 +15,22 @@ AutoDiscoverRTCClock rtc_clock(fallback_clock);
 EnvironmentSensorManager sensors;
 
 bool radio_init() {
+  // Wait for USB CDC to be ready (ESP32-S3 native USB)
+  delay(1000);
+  Serial.println("\n\n=== CrowPanel 3.5 MeshCore ===");
+  Serial.println("Initializing...");
+
   fallback_clock.begin();
   rtc_clock.begin(Wire);
 
-  return radio.std_init(&spi);
+  Serial.println("Initializing LoRa radio...");
+  bool result = radio.std_init(&spi);
+  if (result) {
+    Serial.println("LoRa radio ready");
+  } else {
+    Serial.println("LoRa radio FAILED!");
+  }
+  return result;
 }
 
 uint32_t radio_get_rng_seed() {
