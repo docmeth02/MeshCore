@@ -14,9 +14,12 @@ public:
     pinMode(PIN_LORA_ENABLE, OUTPUT);
     digitalWrite(PIN_LORA_ENABLE, LOW);
 
-    // Turn off display backlight to save power (display unused)
+    // Backlight controlled by LovyanGFX when display is enabled
+    // For non-display builds, turn off to save power
+#ifndef DISPLAY_CLASS
     pinMode(PIN_DISPLAY_BL, OUTPUT);
     digitalWrite(PIN_DISPLAY_BL, LOW);
+#endif
 
     ESP32Board::begin();
   }

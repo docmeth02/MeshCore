@@ -97,4 +97,7 @@ public:
   }
   
   virtual void endFrame() = 0;
+
+  // Touch support - override for touch-enabled displays
+  virtual bool getTouch(int *x, int *y) { return false; }
 };

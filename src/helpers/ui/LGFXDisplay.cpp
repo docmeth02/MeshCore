@@ -114,6 +114,14 @@ void LGFXDisplay::endFrame() {
 bool LGFXDisplay::getTouch(int *x, int *y) {
   lgfx::v1::touch_point_t point;
   display->getTouch(&point);
+
+  // Check validity BEFORE dividing (otherwise -1/2=0 looks like valid touch)
+  if (point.x < 0 || point.y < 0) {
+    *x = -1;
+    *y = -1;
+    return false;
+  }
+
   if (UI_ZOOM != 1) {
     *x = point.x / UI_ZOOM;
     *y = point.y / UI_ZOOM;
@@ -121,5 +129,5 @@ bool LGFXDisplay::getTouch(int *x, int *y) {
     *x = point.x;
     *y = point.y;
   }
-  return (*x >= 0) && (*y >= 0);
+  return true;
 }

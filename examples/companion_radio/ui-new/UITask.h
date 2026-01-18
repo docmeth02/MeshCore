@@ -44,6 +44,10 @@ class UITask : public AbstractUITask {
   unsigned long _analogue_pin_read_millis = millis();
 #endif
 
+  // Touch-as-button state tracking
+  bool _touch_active = false;
+  unsigned long _touch_start = 0;
+
   UIScreen* splash;
   UIScreen* home;
   UIScreen* msg_preview;

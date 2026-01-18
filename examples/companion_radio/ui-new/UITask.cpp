@@ -739,6 +739,30 @@ void UITask::loop() {
   }
 #endif
 
+// Touch-as-button handling (for displays without physical buttons)
+#if !defined(PIN_USER_BTN) && !defined(PIN_USER_BTN_ANA)
+  if (_display != NULL) {
+    int tx, ty;
+    bool touching = _display->getTouch(&tx, &ty);
+
+    if (touching && !_touch_active) {
+      // Touch started
+      _touch_active = true;
+      _touch_start = millis();
+    } else if (!touching && _touch_active) {
+      // Touch released - determine action based on duration
+      _touch_active = false;
+      unsigned long duration = millis() - _touch_start;
+
+      if (duration >= LONG_PRESS_MILLIS) {
+        c = handleLongPress(KEY_ENTER);  // Long press = select
+      } else {
+        c = checkDisplayOn(KEY_NEXT);    // Short press = next
+      }
+    }
+  }
+#endif
+
   if (c != 0 && curr) {
     curr->handleInput(c);
     _auto_off = millis() + AUTO_OFF_MILLIS;   // extend auto-off timer

@@ -14,6 +14,13 @@ AutoDiscoverRTCClock rtc_clock(fallback_clock);
 
 EnvironmentSensorManager sensors;
 
+#ifdef DISPLAY_CLASS
+  DISPLAY_CLASS display;
+  #ifdef PIN_USER_BTN
+    MomentaryButton user_btn(PIN_USER_BTN, 1000, true);
+  #endif
+#endif
+
 bool radio_init() {
   // Wait for USB CDC to be ready (ESP32-S3 native USB)
   delay(1000);

@@ -20,7 +20,7 @@ protected:
 public:
   LGFXDisplay(int w, int h, LGFX_Device &disp)
     : DisplayDriver(w/UI_ZOOM, h/UI_ZOOM), display(&disp) {}
-  bool begin();
+  virtual bool begin();
   bool isOn() override { return _isOn; }
   void turnOn() override;
   void turnOff() override;
